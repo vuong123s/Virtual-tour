@@ -1,0 +1,100 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  position: relative;
+  padding-top: 80px; /* Chiều cao navbar */
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.panorama-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.login-overlay {
+  z-index: 9999; /* Cao hơn navbar (1000) */
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.app-loader {
+  @apply flex items-center justify-center h-screen w-full;
+}
+
+.spinner {
+  @apply w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin;
+}
+
+.auth-page {
+  @apply min-h-screen bg-gray-900 flex items-center justify-center p-4;
+}
+
+.auth-container {
+  @apply w-full max-w-md bg-white/5 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-white/20;
+}
+
+.auth-form {
+  @apply p-8 transition-transform duration-500 ease-in-out;
+}
+
+.shift-left {
+  @apply -translate-x-full;
+}
+
+.shift-right {
+  @apply translate-x-full;
+}
+
