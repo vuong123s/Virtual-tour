@@ -82,7 +82,30 @@
 }
 
 @layer utilities {
+  /* Navbar user dropdown styles */
+  .user-dropdown {
+    @apply origin-top-right transform transition-all duration-300 ease-out;
+  }
 
+  .avatar-ring {
+    @apply ring-2 ring-blue-500 ring-opacity-50;
+  }
+
+  .dropdown-enter {
+    @apply opacity-0 scale-95;
+  }
+
+  .dropdown-enter-active {
+    @apply opacity-100 scale-100;
+  }
+
+  .dropdown-exit {
+    @apply opacity-100 scale-100;
+  }
+
+  .dropdown-exit-active {
+    @apply opacity-0 scale-95;
+  }
 
   .btn_white_rounded  { 
     @apply  medium-15 border border-white bg-white px-7 py-3 text-gray-90 rounded-full
@@ -261,4 +284,65 @@
     @apply text-[15px] font-[700];
   }
 
+  /* Authentication Component Styles */
+  .auth-input {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none;
+  }
+
+  .auth-input-focus {
+    @apply ring-2 ring-blue-500 border-transparent;
+  }
+  
+  .auth-button {
+    @apply w-full py-2 px-4 bg-secondary text-white rounded-md hover:bg-[#ff6b1c] transition-all;
+  }
+  
+  .auth-button-loading {
+    @apply opacity-75 cursor-not-allowed;
+  }
+  
+  .auth-form-error {
+    @apply text-red-500 text-sm mt-1;
+  }
+  
+  .auth-link {
+    @apply text-secondary hover:text-[#ff6b1c] transition-all;
+  }
+  
+  .auth-link-hover {
+    @apply underline underline-offset-4 decoration-secondary;
+  }
+  
+  .auth-form-container {
+    @apply bg-white p-8 rounded-lg shadow-md max-w-md w-full;
+  }
+  
+  .auth-form-title {
+    @apply text-2xl font-bold mb-6 text-center;
+  }
+  
+  .auth-form-divider {
+    @apply flex items-center my-4;
+  }
+  
+  .auth-form-divider::before,
+  .auth-form-divider::after {
+    @apply flex-1 h-px bg-gray-300;
+    content: '';
+  }
+  
+  .auth-form-divider-text {
+    @apply px-3 text-sm text-gray-500;
+  }
+}
+
+/* Authentication Responsive Styles */
+@media (max-width: 640px) {
+  .auth-mobile-view {
+    @apply h-screen max-h-none rounded-none border-0;
+  }
+  
+  .auth-mobile-view .auth-form-content {
+    @apply p-4;
+  }
 }
