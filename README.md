@@ -1,4 +1,4 @@
-# Virtual Tour Editor
+# Virtual Tour
 
 A React-based Virtual Tour Editor built with Vite
 
@@ -55,4 +55,4 @@ Currently, two official plugins are available:
 
 ### Access the Application
 - Open your browser and navigate to `http://localhost:5175` to access the frontend.
-- The backend server will be running on `http://localhost:3001`.
+- The backend server will be running on `http://localhost:3000`.
