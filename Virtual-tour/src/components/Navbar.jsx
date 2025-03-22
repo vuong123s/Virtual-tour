@@ -4,11 +4,9 @@ import { FaRegUser } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import Logo1 from '../assets/logo.png';
-import Login from './Login';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-  const [showLogin, setShowLogin] = useState(false);
   const { user, forceUpdate, logout } = useAuth();
   
   useEffect(() => {
@@ -19,21 +17,8 @@ const Navbar = () => {
     return () => window.removeEventListener('userUpdate', handleUserChange);
   }, [forceUpdate]);
   
-  const handleUserIconClick = () => {
-    if (user) {
-      // If user is logged in, don't show login popup
-      return;
-    }
-    setShowLogin(prev => !prev); // Toggle the state
-  };
-
   return (
     <div className="relative z-50">
-      {/* Using Login component */}
-      <Login 
-        isPopupActive={showLogin}
-        onClose={() => setShowLogin(false)}
-      />
       <div className="py-2 bg-gray-800 fixed top-0 left-0 right-0 text-white border-b border-gray-700 transition-all duration-400 ease-in-out">
         <div className="max_padd_container flex justify-between items-center">
           <div className="mr-auto">
@@ -57,16 +42,9 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <button 
-                onClick={handleUserIconClick}
-                className={`p-2 rounded-full hover:bg-gray-700 ${
-                  showLogin ? 'bg-gray-700' : ''
-                }`}
-              >
-                <FaRegUser className={`transition-transform ${
-                  showLogin ? 'rotate-90' : ''
-                }`} />
-              </button>
+              <Link to="/login" className="p-2 rounded-full hover:bg-gray-700">
+                <FaRegUser />
+              </Link>
             )}
           </div>
         </div>

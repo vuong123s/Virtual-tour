@@ -186,18 +186,11 @@ const Login = ({ isPopupActive, onClose }) => {
 
   return (
     <div className={`min-h-screen flex justify-center items-center fixed inset-0 ${
-      isPopupActive ? 'bg-black/70 backdrop-blur-sm' : 'pointer-events-none'
-    } transition-all duration-700`}>
-      <div className={`relative w-96 h-[560px] bg-transparent border-2 border-white/30 rounded-2xl backdrop-blur-lg shadow-lg transform transition-all duration-500 overflow-hidden ${
+      isPopupActive ? 'bg-black/50' : 'pointer-events-none'
+    } transition-all duration-700`}> 
+      <div className={`relative w-96 h-[560px] bg-white/10 rounded-2xl shadow-lg transform transition-all duration-500 overflow-hidden ${
         isPopupActive ? 'scale-100' : 'scale-0'
-      }`}>
-        <span
-          className="absolute top-0 right-0 w-12 h-12 bg-red-500/80 text-white flex justify-center items-center rounded-bl-2xl cursor-pointer z-10 hover:bg-red-600 transition-colors"
-          onClick={onClose}
-        >
-          ✖
-        </span>
-
+      }`} style={{ opacity: 0.9 }}> 
         {/* Login Form */}
         <div className={`absolute w-full p-10 transition-transform duration-500 ${
           isActive ? "-translate-x-[120%]" : "translate-x-0"

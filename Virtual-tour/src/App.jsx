@@ -1,6 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import VirtualTourEditor from './components/VirtualTourEditor';
 import Navbar from './components/Navbar';
+import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
@@ -33,9 +34,10 @@ function AppContent() {
               <VirtualTourEditor />
             </>
           ) : (
-            <Navbar />
+            <Navigate to="/login" />
           )
         } />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </div>
   );
