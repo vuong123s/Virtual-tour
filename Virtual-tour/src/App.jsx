@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import VirtualTourEditor from './components/VirtualTourEditor';
 import Navbar from './components/Navbar';
+import Slider from './components/Slider'; 
+import TourList from './components/TourList';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
@@ -31,7 +33,9 @@ function AppContent() {
           user ? (
             <>
               <Navbar />
-              <VirtualTourEditor />
+              <TourList />
+              {/* <Slider />   */}
+              {/* <VirtualTourEditor /> */}
             </>
           ) : (
             <Navigate to="/login" />
