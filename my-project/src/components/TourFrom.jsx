@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import * as PANOLENS from "panolens";
 import * as THREE from "three";
 import { IoCreate, IoImage, IoVideocam, IoClose, IoList, IoInformation, IoSettings } from "react-icons/io5";
-import LoadMore from "../assets/load_more.png";
+
 
 const API_BASE_URL = 'http://localhost:3001';
 

@@ -1,1 +1,5 @@
+/Backend/node_modules
+/VirtualTour/node_modules
+/Backend/.env
+
 .qodo

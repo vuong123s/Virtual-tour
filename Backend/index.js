@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const app = express()
 const port = process.env.PORT || 3001
+console.log(process.env.MONGODB_URL, process.env.PORT)
 
 // Import models
 const Tour = require('./models/Tour');
@@ -16,7 +17,7 @@ app.use(express.json())
 app.use(cors())
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
