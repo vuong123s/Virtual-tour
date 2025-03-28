@@ -102,7 +102,6 @@ const TourUpdate = () => {
   // Render form
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold p-4">Update Tour</h1>
       <TourFrom 
         data={tour}
         onSubmit={handleUpdate}

@@ -75,20 +75,7 @@ const Tour = () => {
   // Render tour view
   return (
     <div className="h-screen flex flex-col">
-      {/* Header */}
-      <div className="bg-white shadow-md p-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <div className="flex items-center">
-            <button
-              onClick={() => navigate('/tours')}
-              className="text-gray-600 hover:text-gray-800 mr-4"
-            >
-              ← Back
-            </button>
-            <h1 className="text-2xl font-bold">{tour.name}</h1>
-          </div>
-        </div>
-      </div>
+
 
       {/* Tour Content */}
       <div className="flex-1">
@@ -96,6 +83,7 @@ const Tour = () => {
           data={tour}
           isLoading={loading}
           isTour={true}
+          Sidebar={true}
         />
       </div>
     </div>
