@@ -218,7 +218,7 @@ uploadDirs.forEach(dir => {
 });
 
 // API Endpoints
-app.use('/api/tours', async (req, res) => {
+app.get('/api/tours', async (req, res) => {
   try {
     const tours = await Tour.find()
       .select('tourId name description panoramas infospots linkspots createdAt updatedAt')
@@ -365,7 +365,7 @@ async function getNextTourId() {
 }
 
 // Delete a tour
-app.delete('/:id', async (req, res) => {
+app.delete('/api/tours/:id', async (req, res) => { // Updated route to match frontend
   try {
     console.log('Deleting tour with ID:', req.params.id);
     

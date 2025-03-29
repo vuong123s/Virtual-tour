@@ -14,7 +14,7 @@ const authController = {
             //Create new user
             const newUser = await new User({
                 username: req.body.username,
-                email:req.body.email,
+                email: req.body.email.toLowerCase(), // Convert email to lowercase
                 password: hashed,
             });
 
@@ -53,7 +53,7 @@ const authController = {
     //Login
     loginUser: async (req, res) => {
         try {
-            const user = await User.findOne({ email: req.body.email });
+            const user = await User.findOne({ email: req.body.email.toLowerCase() }); // Convert email to lowercase
             if (!user) {
                 return res.status(404).json({ message: "Email not found!" });
             }
