@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { TourContext } from '../contexts';
 import { IoAdd, IoTrash, IoCreate, IoEye } from 'react-icons/io5';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:8000/api'; 
 
 const Home = () => {
   const navigate = useNavigate();

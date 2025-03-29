@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TourForm from '../components/TourFrom';
 import { TourContext } from '../contexts';
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:8000/api'; // Ensure the base URL is correct
 
 const TourCreate = () => {
   const navigate = useNavigate();
@@ -13,27 +13,21 @@ const TourCreate = () => {
       setIsLoading(true);
       console.log('Creating new tour with data:', formData);
 
-      // Generate tourId for new tour
-      const newTourData = {
-        ...formData,
-        tourId: `tour_${Date.now()}`
-      };
-
       const response = await fetch(`${API_BASE_URL}/tours`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(newTourData)
+        body: JSON.stringify(formData)
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
-        throw new Error(result.message || `HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        throw new Error(errorText || `HTTP error! status: ${response.status}`);
       }
 
+      const result = await response.json();
       if (result.success) {
         console.log('Tour created successfully:', result.tour);
         alert('Tour created successfully!');

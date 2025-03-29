@@ -1,21 +1,42 @@
-import React, { useRef, useState, useEffect } from "react";
-import * as PANOLENS from "panolens";
-import * as THREE from "three";
+import React from "react";
+import { Routes, Route, Navigate } from 'react-router-dom';
 import TourCreate from "./pages/TourCreate";
-import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Tour from "./pages/Tour";
 import TourUpdate from "./pages/TourUpdate";
+import Navbar from './components/Navbar';
+import LoginPage from './pages/LoginPage';
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+
+const API_BASE_URL = 'http://localhost:8000/api'; 
+
 export default function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/tours" element={<Home />} />
-        <Route path="/tour/:tourId" element={<Tour />} />
-        <Route path="/tour-update/:tourId" element={<TourUpdate />} />
-        <Route path="/tour-create" element={<TourCreate />} />
-      </Routes>
-    </div>
+    <AuthProvider> 
+      <div className="app-container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Navbar />
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/auth" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/tours" element={<Home />} />
+          <Route path="/tour/:tourId" element={<Tour />} />
+          <Route path="/tour-update/:tourId" element={<TourUpdate />} />
+          <Route path="/tour-create" element={<TourCreate />} />
+        </Routes>
+      </div>
+    </AuthProvider>
   );
+}
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth(); 
+  return user ? children : <Navigate to="/login" />;
 }

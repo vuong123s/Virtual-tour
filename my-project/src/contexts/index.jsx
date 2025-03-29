@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:8000/api'; // Ensure this matches the backend URL
 
 export const TourContext = createContext(null);
 
@@ -204,4 +204,3 @@ const TourProvider = (props) => {
 };
 
 export default TourProvider;
-
