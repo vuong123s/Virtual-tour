@@ -1,13 +1,16 @@
 const express = require("express")
 const mongoose = require("mongoose")
+const dotenv = require('dotenv');
 const multer = require("multer")
 const path = require("path")
 const cors = require("cors")
-require('dotenv').config();
+const cookieParser = require('cookie-parser');
+const authRoute = require('./routes/auth');
+const userRoute = require('./routes/user');
+
+dotenv.config();
 
 const app = express()
-const port = process.env.PORT || 3001
-console.log(process.env.MONGODB_URL, process.env.PORT)
 
 // Import models
 const Tour = require('./models/Tour');
@@ -18,8 +21,22 @@ app.use(cors())
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URL)
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("Connection error:", err));
+
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cookieParser());
+app.use(express.json());
+
+//ROUTES
+app.use('/api/auth', authRoute); 
+app.use('/user', userRoute);
+
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 // Configure storage for different file types
 const storage = {
@@ -91,26 +108,31 @@ app.use('/images', express.static('upload/images'))
 app.use('/videos', express.static('upload/videos'))
 
 // Upload endpoints
-app.post("/upload/panorama", upload.panorama.single('panorama'), (req, res) => {
-    try {
-        res.json({
-            success: 1,
-            file: {
-                url: `http://localhost:${port}/panoramas/${req.file.filename}`,
-                name: req.file.originalname,
-                size: req.file.size,
-                type: req.file.mimetype
-            }
-        });
-    } catch (error) {
-        res.status(400).json({
-            success: 0,
-            message: error.message
-        });
+app.post("/api/upload/panorama", upload.panorama.single('panorama'), (req, res) => {
+  try {
+    if (!req.file) {
+      throw new Error('No file uploaded');
     }
+
+    res.json({
+      success: 1,
+      file: {
+        url: `http://localhost:${port}/panoramas/${req.file.filename}`,
+        name: req.file.originalname,
+        size: req.file.size,
+        type: req.file.mimetype
+      }
+    });
+  } catch (error) {
+    console.error('Error handling panorama upload:', error);
+    res.status(400).json({
+      success: 0,
+      message: error.message
+    });
+  }
 });
 
-app.post("/upload/image", upload.image.single('image'), (req, res) => {
+app.post("/api/upload/image", upload.image.single('image'), (req, res) => {
     try {
         res.json({
             success: 1,
@@ -129,7 +151,7 @@ app.post("/upload/image", upload.image.single('image'), (req, res) => {
     }
 });
 
-app.post("/upload/video", upload.video.single('video'), (req, res) => {
+app.post("/api/upload/video", upload.video.single('video'), (req, res) => {
     try {
         res.json({
             success: 1,
@@ -149,7 +171,7 @@ app.post("/upload/video", upload.video.single('video'), (req, res) => {
 });
 
 // Multiple files upload endpoint
-app.post("/upload/multiple", upload.image.array('files', 10), (req, res) => {
+app.post("/api/upload/multiple", upload.image.array('files', 10), (req, res) => {
     try {
         const files = req.files.map(file => ({
             url: `http://localhost:${port}/images/${file.filename}`,
@@ -196,8 +218,7 @@ uploadDirs.forEach(dir => {
 });
 
 // API Endpoints
-// Get all tours
-app.get('/tours', async (req, res) => {
+app.use('/api/tours', async (req, res) => {
   try {
     const tours = await Tour.find()
       .select('tourId name description panoramas infospots linkspots createdAt updatedAt')
@@ -230,8 +251,36 @@ app.get('/tours', async (req, res) => {
   }
 });
 
+app.post('/api/tours', async (req, res) => {
+  try {
+    const tourId = await getNextTourId();
+    const tourData = {
+      ...req.body,
+      tourId,
+      infospots: req.body.infospots,
+      linkspots: req.body.linkspots
+    };
+
+    const tour = new Tour(tourData);
+    await tour.save();
+
+    res.status(201).json({
+      success: true,
+      message: 'Tour created successfully',
+      tour
+    });
+  } catch (error) {
+    console.error('Error creating tour:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error creating tour',
+      error: error.message
+    });
+  }
+});
+
 // Get a specific tour by tourId
-app.get('/tours/:id', async (req, res) => {
+app.get('/api/tours/:id', async (req, res) => {
   try {
     console.log('Searching for tour with ID:', req.params.id);
     
@@ -316,7 +365,7 @@ async function getNextTourId() {
 }
 
 // Delete a tour
-app.delete('/tours/:id', async (req, res) => {
+app.delete('/:id', async (req, res) => {
   try {
     console.log('Deleting tour with ID:', req.params.id);
     
@@ -374,12 +423,12 @@ app.delete('/tours/:id', async (req, res) => {
 });
 
 // Update a tour
-app.put('/tours/:id', async (req, res) => {
+app.put('/api/tours/:id', async (req, res) => {
   try {
     console.log('Updating tour with ID:', req.params.id);
     console.log('Update data:', req.body);
 
-    // Check if tour exists
+    // Check if the tour exists
     const existingTour = await Tour.findOne({ tourId: req.params.id });
     if (!existingTour) {
       return res.status(404).json({
@@ -398,39 +447,23 @@ app.put('/tours/:id', async (req, res) => {
       updatedAt: new Date()
     };
 
-    // Update tour using findOneAndUpdate
+    // Update the tour in MongoDB
     const updatedTour = await Tour.findOneAndUpdate(
       { tourId: req.params.id },
       { $set: updateData },
-      { 
-        new: true,        // Return the updated document
-        runValidators: true,  // Run model validators
-        lean: true        // Return a plain JavaScript object
-      }
+      { new: true, runValidators: true, lean: true }
     );
 
     if (!updatedTour) {
       throw new Error('Failed to update tour');
     }
 
-    // Format the response
-    const formattedTour = {
-      tourId: updatedTour.tourId,
-      name: updatedTour.name,
-      description: updatedTour.description,
-      panoramas: updatedTour.panoramas || [],
-      infospots: updatedTour.infospots || [],
-      linkspots: updatedTour.linkspots || [],
-      createdAt: updatedTour.createdAt,
-      updatedAt: updatedTour.updatedAt
-    };
-
-    console.log('Tour updated successfully:', formattedTour);
+    console.log('Tour updated successfully:', updatedTour);
 
     res.json({
       success: true,
       message: 'Tour updated successfully',
-      tour: formattedTour
+      tour: updatedTour
     });
   } catch (error) {
     console.error('Error updating tour:', error);
@@ -442,7 +475,8 @@ app.put('/tours/:id', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Handle unmatched routes
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: 'API endpoint not found' });
 });
 

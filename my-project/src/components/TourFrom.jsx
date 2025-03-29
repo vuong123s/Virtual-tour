@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { IoCreate, IoImage, IoVideocam, IoClose, IoList, IoInformation, IoSettings } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:8000/api'; 
 
 export default function TourForm({ data, onSubmit, isLoading, isTour }) {
   const containerRef = useRef(null);
@@ -102,7 +102,6 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
       })) || [];
       setLinkspots(formattedLinkspots);
 
-      
       // // Initialize viewer with first panorama immediately
       // if (data.panoramas.length > 0) {
       //   const firstPanoId = data.panoramas[0].panoId;
@@ -359,7 +358,8 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to upload panorama');
+          const errorText = await response.text();
+          throw new Error(errorText || `HTTP error! status: ${response.status}`);
         }
 
         const result = await response.json();
@@ -368,26 +368,25 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         }
 
         const panoId = `pano_${panoIdCounter}`;
-        
         const newPanoData = {
           id: panoId,
           imageUrl: result.file.url,
           hotspots: []
         };
 
-        setTour(prev => ({
+        setTour((prev) => ({
           ...prev,
           panoramas: [...prev.panoramas, panoId]
         }));
 
-        setPanoList(prev => [...prev, newPanoData]);
-        setPanoIdCounter(prev => prev + 1);
+        setPanoList((prev) => [...prev, newPanoData]);
+        setPanoIdCounter((prev) => prev + 1);
 
-        // Initialize viewer with new panorama
+        // Initialize viewer with the new panorama
         const newPanorama = new PANOLENS.ImagePanorama(result.file.url);
 
         if (!viewer) {
-          const newViewer = new PANOLENS.Viewer({ 
+          const newViewer = new PANOLENS.Viewer({
             container: containerRef.current,
             controlBar: true,
             autoRotate: false,
@@ -403,9 +402,9 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
           viewer.add(newPanorama);
           viewer.setPanorama(newPanorama);
         }
-        
-          setCurrentPanorama(newPanorama);
-          setCurrentPanoId(panoId);
+
+        setCurrentPanorama(newPanorama);
+        setCurrentPanoId(panoId);
 
         console.log('Created Panorama:', JSON.stringify(newPanoData, null, 2));
       } catch (error) {
