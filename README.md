@@ -28,7 +28,7 @@ Currently, two official plugins are available:
 ### Frontend
 1. Navigate to the project directory:
    ```sh
-   cd d:\Workspace\VirtualTour\Virtual-tour
+   cd d:\Workspace\VirtualTour\my-project
    ```
 2. Install dependencies:
    ```sh
@@ -54,5 +54,5 @@ Currently, two official plugins are available:
    ```
 
 ### Access the Application
-- Open your browser and navigate to `http://localhost:5175` to access the frontend.
-- The backend server will be running on `http://localhost:3000`.
+- Open your browser and navigate to `http://localhost:5173` to access the frontend.
+- The backend server will be running on `http://localhost:8000`.
