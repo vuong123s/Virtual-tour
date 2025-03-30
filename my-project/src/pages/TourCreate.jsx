@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TourForm from '../components/TourFrom';
+import TourForm from '../components/TourForm';
 import { TourContext } from '../contexts';
 const API_BASE_URL = 'http://localhost:8000/api'; // Ensure the base URL is correct
 
@@ -45,7 +45,6 @@ const TourCreate = () => {
 
   return (
     <div className="">
-      <h1 className="text-2xl font-bold mt-2 mx-4">Create New Tour</h1>
       <TourForm 
         onSubmit={handleCreate}
         isLoading={isLoading}

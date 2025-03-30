@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TourContext } from '../contexts';
-import TourFrom from '../components/TourFrom';
+import TourForm from '../components/TourForm';
 
 const TourUpdate = () => {
   const { tourId } = useParams();
@@ -102,7 +102,7 @@ const TourUpdate = () => {
   // Render form
   return (
     <div className="">
-      <TourFrom 
+      <TourForm 
         data={tour}
         onSubmit={handleUpdate}
         isLoading={loading}

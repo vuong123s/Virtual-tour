@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TourContext } from '../contexts';
-import TourFrom from '../components/TourFrom';
+import TourFrom from '../components/TourForm';
 
 const Tour = () => {
   const { tourId } = useParams();
