@@ -44,8 +44,8 @@ const TourCreate = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-2xl font-bold p-4">Create New Tour</h1>
+    <div className="">
+      <h1 className="text-2xl font-bold mt-2 mx-4">Create New Tour</h1>
       <TourForm 
         onSubmit={handleCreate}
         isLoading={isLoading}

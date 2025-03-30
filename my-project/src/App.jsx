@@ -8,7 +8,6 @@ import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
-const API_BASE_URL = 'http://localhost:8000/api'; 
 
 export default function App() {
   return (
@@ -26,7 +25,16 @@ export default function App() {
           />
           <Route path="/auth" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/tours" element={<Home />} />
+          {/* <Route path="/tours" element={<Home />} /> */}
+          <Route
+            path="/tours"
+            element={
+              <ProtectedRoute>
+                <Navbar />
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/tour/:tourId" element={<Tour />} />
           <Route path="/tour-update/:tourId" element={<TourUpdate />} />
           <Route path="/tour-create" element={<TourCreate />} />
