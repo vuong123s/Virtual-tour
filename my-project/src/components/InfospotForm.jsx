@@ -257,7 +257,7 @@ export default function InfospotForm({
             );
 
             // Add hover text
-            newInfospot.addHoverText(infospotData.text);
+            //newInfospot.addHoverText(infospotData.text);
 
             // Handle click to show info
             newInfospot.addEventListener("click", () => {

@@ -10,6 +10,7 @@ import LinkspotForm from './LinkspotForm';
 import SpotsList from './SpotsList';
 import EditSpotModal from './EditSpotModal';
 import InfoModal from './InfoModal';
+import Logo1 from "../assets/logo1.png";
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -64,6 +65,16 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
   const [panoIdCounter, setPanoIdCounter] = useState(1);
   const [showSidebar, setShowSidebar] = useState(!isTour);
 
+  // Add search state
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Add search filter function
+  const filteredPanoramas = tour.panoramas.filter(panoId => {
+    const pano = panoList.find(p => p.id === panoId);
+    const sceneName = pano?.name || `Scene ${tour.panoramas.indexOf(panoId) + 1}`;
+    return sceneName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   // Load initial data when component mounts
   useEffect(() => {
     if (data) {
@@ -77,10 +88,11 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         panoramas: data.panoramas.map(p => p.panoId) || []
       });
 
-      // Set panorama list
-      const formattedPanoList = data.panoramas.map(pano => ({
+      // Set panorama list with names
+      const formattedPanoList = data.panoramas.map((pano, index) => ({
         id: pano.panoId,
         imageUrl: pano.imageUrl,
+        name: pano.name || `Scene ${index + 1}`,
         hotspots: []
       }));
       setPanoList(formattedPanoList);
@@ -219,7 +231,11 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
     panoLinkspots.forEach(spot => {
       const linkspot = new PANOLENS.Infospot(spot.size, PANOLENS.DataImage.Arrow);
       linkspot.position.set(spot.position.x, spot.position.y, spot.position.z);
-      linkspot.addHoverText(spot.text);
+      
+      // Get target scene name
+      const targetPano = panoList.find(p => p.id === spot.targetPanoId);
+      const targetName = targetPano?.name || `Scene ${tour.panoramas.indexOf(spot.targetPanoId) + 1}`;
+      linkspot.addHoverText(targetName);
 
       linkspot.addEventListener('hover', () => {
         linkspot.scale.set(1.2, 1.2, 1);
@@ -296,7 +312,11 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
     panoLinkspots.forEach(spot => {
       const linkspot = new PANOLENS.Infospot(spot.size, PANOLENS.DataImage.Arrow);
       linkspot.position.set(spot.position.x, spot.position.y, spot.position.z);
-      linkspot.addHoverText(spot.text);
+      
+      // Get target scene name
+      const targetPano = panoList.find(p => p.id === spot.targetPanoId);
+      const targetName = targetPano?.name || `Scene ${tour.panoramas.indexOf(spot.targetPanoId) + 1}`;
+      linkspot.addHoverText(targetName);
 
       linkspot.addEventListener('hover', () => {
         linkspot.scale.set(1.2, 1.2, 1);
@@ -376,6 +396,7 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         const newPanoData = {
           id: panoId,
           imageUrl: result.file.url,
+          name: `Scene ${panoIdCounter}`,
           hotspots: []
         };
 
@@ -434,7 +455,8 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         description: tour.description || '',
         panoramas: panoList.map(pano => ({
           panoId: pano.id,
-          imageUrl: pano.imageUrl
+          imageUrl: pano.imageUrl,
+          name: pano.name || `Scene ${tour.panoramas.indexOf(pano.id) + 1}`
         })),
         infospots: infospots.map(spot => ({
           infospotId: spot.id,
@@ -644,6 +666,16 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
     }
   };
 
+  // Add updatePanoName function
+  const updatePanoName = (panoId, newName) => {
+    setPanoList(prev => prev.map(pano => {
+      if (pano.id === panoId) {
+        return { ...pano, name: newName };
+      }
+      return pano;
+    }));
+  };
+
   return (
     <div className="flex h-screen relative">
       {/* Sidebar Toggle Button - Only show when isTour is true */}
@@ -668,7 +700,9 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
       } bg-gray-100 overflow-auto`}>
         <div className={`${!showSidebar ? 'hidden' : 'm-6'}`}>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold"><Link to="/tours">Tours List</Link></h2>
+            <h2 className="text-xl font-bold"><Link to="/">
+              <img className='h-5 mx-2 my-3' src={Logo1} alt="" />
+            </Link></h2>
             {!isTour && (
               <button
                 onClick={() => setIsEditMode(!isEditMode)}
@@ -706,6 +740,17 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
             </div>
           )}
 
+          {/* Scene Search */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search scenes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
           {/* Panorama List */}
           {tour.panoramas.length > 0 && (
             <PanoramaList 
@@ -721,6 +766,8 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
               setShowInfospotForm={setShowInfospotForm}
               setShowLinkspotForm={setShowLinkspotForm}
               setCurrentPanoId={setCurrentPanoId}
+              updatePanoName={updatePanoName}
+              filteredPanoramas={filteredPanoramas}
             />
           )}
 
@@ -801,7 +848,7 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
       <div ref={containerRef} className={`$ w-full h-full bg-black relative left transition-all duration-300`}>
         {currentPanoId && (
           <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded">
-            Scene {tour.panoramas.indexOf(currentPanoId) + 1}
+            {panoList.find(p => p.id === currentPanoId)?.name || `Scene ${tour.panoramas.indexOf(currentPanoId) + 1}`}
           </div>
         )}
 

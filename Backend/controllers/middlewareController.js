@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const middlewareController = {
     //verifyToken
@@ -27,6 +28,21 @@ const middlewareController = {
                 res.status(403).json("You're not an admin");
             }
         });
+    },
+
+    verifyAdmin: async (req, res, next) => {
+        try {
+            const user = await User.findById(req.user.id);
+            if (!user) {
+                return res.status(404).json('User not found');
+            }
+            if (!user.admin) {
+                return res.status(403).json('You are not authorized to perform this action!');
+            }
+            next();
+        } catch (err) {
+            return res.status(500).json('Error verifying admin status');
+        }
     }
 }
 

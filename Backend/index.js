@@ -16,21 +16,21 @@ const app = express()
 const Tour = require('./models/Tour');
 
 // Middleware
-app.use(express.json())
-app.use(cors())
+app.use(cors({ 
+  origin: 'http://localhost:5173', 
+  credentials: true 
+}));
+app.use(cookieParser());
+app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Connection error:", err));
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-app.use(cookieParser());
-app.use(express.json());
-
 //ROUTES
 app.use('/api/auth', authRoute); 
-app.use('/user', userRoute);
+app.use('/api/user', userRoute);  // Changed from '/user' to '/api/user'
 
 const port = process.env.PORT || 8000;
 

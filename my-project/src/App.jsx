@@ -7,13 +7,18 @@ import TourUpdate from "./pages/TourUpdate";
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import Admin from './pages/Admin'; // Import the Admin component
+import UserInterface from './pages/UserInterface';
 
 
 export default function App() {
   return (
     <AuthProvider> 
       <div className="app-container">
+
+
         <Routes>
+          <Route path="/admin" element={<Admin />} /> {/* Admin route */}
           <Route
             path="/"
             element={
@@ -38,6 +43,8 @@ export default function App() {
           <Route path="/tour/:tourId" element={<Tour />} />
           <Route path="/tour-update/:tourId" element={<TourUpdate />} />
           <Route path="/tour-create" element={<TourCreate />} />
+
+          <Route path="/interface" element={<UserInterface />} />
         </Routes>
       </div>
     </AuthProvider>

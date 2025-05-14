@@ -22,12 +22,7 @@ export default function InfoModal({ showInfoModal, setShowInfoModal, modalConten
 
         {/* Content Container */}
         <div className="p-6 space-y-6">
-          {/* Text Content */}
-          {modalContent.text && (
-            <div className="prose max-w-none">
-              <p className="text-lg">{modalContent.text}</p>
-            </div>
-          )}
+          
 
           {/* Images */}
           {modalContent.images && modalContent.images.length > 0 && (
@@ -56,6 +51,14 @@ export default function InfoModal({ showInfoModal, setShowInfoModal, modalConten
               ))}
             </div>
           )}
+
+          {/* Text Content */}
+          {modalContent.text && (
+            <div className="prose max-w-none">
+              <p className="text-lg">{modalContent.text}</p>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

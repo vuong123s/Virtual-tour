@@ -12,10 +12,9 @@
 }
 
 
-
 @font-face {
   font-family: "Lillybelle";
-  src: url("https://fontsforyou.com/fonts/l/Lillybelle.ttf");
+  src: url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 }
 
 .your-style {

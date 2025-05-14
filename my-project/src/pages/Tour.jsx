@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TourContext } from '../contexts';
-import TourFrom from '../components/TourForm';
+import TourForm from '../components/TourForm';
 
 const Tour = () => {
   const { tourId } = useParams();
@@ -79,7 +79,7 @@ const Tour = () => {
 
       {/* Tour Content */}
       <div className="flex-1">
-        <TourFrom 
+        <TourForm 
           data={tour}
           isLoading={loading}
           isTour={true}
