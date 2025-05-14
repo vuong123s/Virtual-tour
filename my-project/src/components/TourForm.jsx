@@ -213,7 +213,7 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
     panoInfospots.forEach(spot => {
       const infospot = new PANOLENS.Infospot(spot.size, PANOLENS.DataImage.Info);
       infospot.position.set(spot.position.x, spot.position.y, spot.position.z);
-      infospot.addHoverText(spot.text);
+      //infospot.addHoverText(spot.text);
       infospot.addEventListener("click", () => {
         const content = getInfospotContent(
           spot.text,
@@ -294,7 +294,7 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
     panoInfospots.forEach(spot => {
       const infospot = new PANOLENS.Infospot(spot.size, PANOLENS.DataImage.Info);
       infospot.position.set(spot.position.x, spot.position.y, spot.position.z);
-      infospot.addHoverText(spot.text);
+      //infospot.addHoverText(spot.text);
       infospot.addEventListener("click", () => {
         const content = getInfospotContent(
           spot.text,
@@ -635,7 +635,7 @@ export default function TourForm({ data, onSubmit, isLoading, isTour }) {
         );
 
         // Cập nhật hover text
-        newLinkspot.addHoverText(updatedData.text || linkspot.text);
+        //newLinkspot.addHoverText(updatedData.text || linkspot.text);
 
         // Thêm hover effect
         newLinkspot.addEventListener('hover', () => {
