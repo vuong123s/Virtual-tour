@@ -7,6 +7,7 @@ const cors = require("cors")
 const cookieParser = require('cookie-parser');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const { swaggerUi, swaggerSpec } = require('./swagger');
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);  // Changed from '/user' to '/api/user'
 
 const port = process.env.PORT || 8000;
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -479,4 +482,125 @@ app.put('/api/tours/:id', async (req, res) => {
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'API endpoint not found' });
 });
+
+/**
+ * @swagger
+ * /api/tours:
+ *   get:
+ *     summary: Lấy danh sách tour
+ *     responses:
+ *       200:
+ *         description: Danh sách tour
+ *   post:
+ *     summary: Tạo tour mới
+ *     responses:
+ *       201:
+ *         description: Tạo thành công
+ */
+
+/**
+ * @swagger
+ * /api/tours/{id}:
+ *   get:
+ *     summary: Lấy thông tin tour theo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của tour
+ *     responses:
+ *       200:
+ *         description: Thông tin tour
+ *   delete:
+ *     summary: Xóa tour theo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của tour
+ *     responses:
+ *       200:
+ *         description: Xóa thành công
+ */
+
+/**
+ * @swagger
+ * /api/upload/panorama:
+ *   post:
+ *     summary: Upload ảnh panorama
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               panorama:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Upload thành công
+ *
+ * /api/upload/image:
+ *   post:
+ *     summary: Upload ảnh thường
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Upload thành công
+ *
+ * /api/upload/video:
+ *   post:
+ *     summary: Upload video
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Upload thành công
+ *
+ * /api/upload/multiple:
+ *   post:
+ *     summary: Upload nhiều ảnh
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Upload thành công
+ */
 
