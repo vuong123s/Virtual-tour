@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Login from '../components/Login';
-import loginBg from '../assets/login-bg.jpg';
-import { ToastContainer } from 'react-toastify'; // Import ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import styles
+import loginBg from '../assets/login-bg3.jpg';
+import { ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const LoginPage = () => {
   const [isPopupActive, setIsPopupActive] = useState(true);
