@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 import Logo1 from "../assets/logo1.png";
-import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
 const UserInterface = () => {
+  const { user, logout } = useAuth();
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,9 +24,7 @@ const UserInterface = () => {
   const fetchTours = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/tours`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch tours');
-      }
+      if (!response.ok) throw new Error('Failed to fetch tours');
       const data = await response.json();
       const toursArray = Array.isArray(data) ? data : data.tours || [];
       setTours(toursArray);
@@ -37,18 +36,24 @@ const UserInterface = () => {
     }
   };
 
-  const handleTourClick = (tourId) => {
-    navigate(`/tour/${tourId}`);
+  const handleTourClick = (tourId) => navigate(`/tour/${tourId}`);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
   };
 
-  const slides = Array.isArray(tours) ? tours.map(tour => ({
-    id: tour.tourId,
-    title: tour.name || 'Untitled Tour',
-    subtitle: tour.description || 'No description available',
-    image: tour.panoramas[0].imageUrl || "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80"
-  })) : [];
+  const slides = Array.isArray(tours)
+    ? tours.map(tour => ({
+        id: tour.tourId,
+        title: tour.name || 'Untitled Tour',
+        subtitle: tour.description || 'No description available',
+        image: tour.panoramas[0].imageUrl ||
+          "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80"
+      }))
+    : [];
 
-  const filteredTours = tours.filter(tour => 
+  const filteredTours = tours.filter(tour =>
     tour.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (tour.description && tour.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
@@ -59,13 +64,23 @@ const UserInterface = () => {
       <nav className="bg-white/80 backdrop-blur-md shadow-lg fixed w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <Link to="/" className="flex items-center">
-              <img className='h-6 mx-2 my-3' src = {Logo1} />
-            </Link>
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center">
+                <img className="h-6 mx-2 my-3" src={Logo1} alt="Logo" />
+              </Link>
+            </div>
             <div className="flex items-center space-x-8">
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">Home</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">About</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">Contact</a>
+              <div className="flex items-center space-x-8">
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">Home</a>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">About</a>
+                <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">Contact</a>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">Hi, {user?.username || 'User'}</span>
+                <button onClick={handleLogout} className="text-red-400 hover:text-red-300 text-sm">
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -239,7 +254,7 @@ const UserInterface = () => {
                   >
                     <div className="relative h-48">
                       <img
-                        src={tour.panoramas[0]?.imageUrl || "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80"}
+                        src={tour.panoramas[0]?.imageUrl || "https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80"}
                         alt={tour.name}
                         className="w-full h-full object-cover"
                       />
@@ -304,4 +319,4 @@ const UserInterface = () => {
   );
 };
 
-export default UserInterface; 
+export default UserInterface;

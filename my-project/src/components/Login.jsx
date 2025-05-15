@@ -183,7 +183,7 @@ const Login = ({ isPopupActive, onClose }) => {
 
   return (
     <div className={`min-h-screen flex justify-center items-center fixed inset-0 ${
-      isPopupActive ? 'bg-black/50' : 'pointer-events-none'
+      isPopupActive ? 'bg-black/10' : 'pointer-events-none'
     } transition-all duration-700`}> 
       <div className={`relative w-96 h-[560px] bg-white/10 rounded-2xl shadow-lg transform transition-all duration-500 overflow-hidden ${
         isPopupActive ? 'scale-100' : 'scale-0'
@@ -213,9 +213,6 @@ const Login = ({ isPopupActive, onClose }) => {
                 peer-focus:opacity-0 peer-focus:-translate-y-3 peer-focus:text-sm`}>
                 Email
               </label>
-              {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white">
-                📧
-              </span> */}
               {errors.email && <span className="text-red-400 text-sm mt-1 block">{errors.email}</span>}
             </div>
 
@@ -238,9 +235,6 @@ const Login = ({ isPopupActive, onClose }) => {
                 peer-focus:opacity-0 peer-focus:-translate-y-3 peer-focus:text-sm`}>
                 Password
               </label>
-              {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white">
-                🔒
-              </span> */}
               {errors.password && <span className="text-red-400 text-sm mt-1 block">{errors.password}</span>}
             </div>
 
@@ -319,9 +313,6 @@ const Login = ({ isPopupActive, onClose }) => {
                 peer-focus:opacity-0 peer-focus:-translate-y-3 peer-focus:text-sm`}>
                 Username
               </label>
-              {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white">
-                👤
-              </span> */}
               {errors.username && <span className="text-red-400 text-sm mt-1 block">{errors.username}</span>}
             </div>
 
@@ -343,9 +334,6 @@ const Login = ({ isPopupActive, onClose }) => {
                 peer-focus:opacity-0 peer-focus:-translate-y-3 peer-focus:text-sm`}>
                 Email
               </label>
-              {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white">
-                📧
-              </span> */}
               {errors.email && <span className="text-red-400 text-sm mt-1 block">{errors.email}</span>}
             </div>
 
@@ -367,9 +355,6 @@ const Login = ({ isPopupActive, onClose }) => {
                 peer-focus:opacity-0 peer-focus:-translate-y-3 peer-focus:text-sm`}>
                 Password
               </label>
-              {/* <span className="absolute right-2 top-1/2 -translate-y-1/2 text-white">
-                🔒
-              </span> */}
               {errors.password && <span className="text-red-400 text-sm mt-1 block">{errors.password}</span>}
             </div>
 
